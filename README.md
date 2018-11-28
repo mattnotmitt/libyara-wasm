@@ -1,6 +1,7 @@
 # libyara-wasm
-
-Honestly can't believe this compiles, I don't even know if this runs any actual yara code but i'm so tired at this point i don't even care.
+Basic compilation of libyara to wasm and to run some tests in a html file. Further plans include basic yara functionality tests before potential integration with CyberChef. 
+(I don't exactly understand the wasm/js integration layer just yet, so we'll see how it goes)
+Some modules unavailable at the moment, but this isn't necessarily always going to be true.
 
 ## Build
 
