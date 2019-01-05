@@ -10,7 +10,7 @@ ExternalProject_Add(yara
         URL_HASH SHA512=32acb7b7336eebe2fe2c10ba6e8b23fea4e91148c289d15b53119bbed3dfe27508fbd90aef5c036a5b6a7e31e0f73ec8885e30093c598f9bc04bd9d64ac0ac7e
         CONFIGURE_COMMAND ./bootstrap.sh
         COMMAND emconfigure ./configure
-        CMAKE_GENERATOR make
+        CMAKE_GENERATOR emmake make
         BUILD_IN_SOURCE 1
         BUILD_BYPRODUCTS
         <SOURCE_DIR>/libyara/.libs/libyara.a

@@ -30,6 +30,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef _UTIL_H
 #define _UTIL_H
 
+#include <iostream>
+#include <vector>
 #include <stdio.h>
 #include <unistd.h>
 
