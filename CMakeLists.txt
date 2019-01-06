@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 project(libyara-wasm)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 
 include(ExternalProject)
 
@@ -29,12 +29,15 @@ add_dependencies(libyara yara)
 
 include_directories(
         ${CMAKE_CURRENT_BINARY_DIR}/yara-prefix/src/yara/libyara/include
+        ${CMAKE_CURRENT_BINARY_DIR}/yara-prefix/src/yara/libyara/.libs
         ${CMAKE_CURRENT_SOURCE_DIR}
+        $ENV{EMSCRIPTEN}/system/include/
 )
 
 add_executable(libyara-wasm main.cpp util.hpp util.cpp)
+add_dependencies(libyara-wasm libyara)
 target_link_libraries(libyara-wasm libyara)
 set_target_properties(libyara-wasm
-        PROPERTIES SUFFIX ".html"
-        LINK_FLAGS "-O3"
+        PROPERTIES SUFFIX ".js"
+        LINK_FLAGS "-O3 --bind"
 )
