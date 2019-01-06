@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yara WASM Test</title>
+    <script src="build/libyara-wasm.js"></script>
+    <script>
+        Module.onRuntimeInitialized = _ => {
+            document.forms["yara"].style.display = "block";
+        }
+        function runYara () {
+            let cNode = document.getElementById("results").cloneNode(false);
+            document.getElementById("results").parentNode.replaceChild(cNode, document.getElementById("results"));
+            const rules = document.forms["yara"]["rules"].value;
+            const data = document.forms["yara"]["data"].value;
+            const matchedRules = Module.run(data, rules);
+            for (let i = 0; i < matchedRules.keys().size(); i++) {
+                const rule_matches = matchedRules.get(matchedRules.keys().get(i));
+                let matchString = `Rule "${matchedRules.keys().get(i)}" matches:\n`;
+                for (let j = 0; j < rule_matches.size(); j++) {
+                    const match = rule_matches.get(j);
+                    matchString += `Position ${match.location}, length ${match.length}, data: ${match.data}\n`;
+                }
+                const para = document.createElement("p");
+                para.append(document.createTextNode(matchString));
+                document.getElementById("results").appendChild(para);
+            }
+        }
+    </script>
+</head>
+<body>
+<form name="yara" style="display: none">
+    Rules:<br>
+    <textarea cols="40" rows="5" name="rules">
+rule foo {
+    strings:
+        $re1 = /foo/
+    condition:
+        $re1
+}
+rule bar {
+    strings:
+        $re1 = /bar/
+    condition:
+        $re1
+}
+    </textarea>
+    <br>Data:<br>
+    <textarea cols="40" rows="5" name="data">foobar foobar bar foo foobar</textarea>
+    <br>
+    <input type="button" value="Submit" onclick="runYara()">
+</form>
+<div id="results"></div>
+</body>
+</html>
