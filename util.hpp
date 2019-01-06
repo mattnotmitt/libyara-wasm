@@ -41,11 +41,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <fcntl.h>
 
 #include <yara.h>
-struct resolved_match {
-    int64_t location;
-    int32_t match_length;
-    std::string data;
-};
+
 extern char compile_error[1024];
 extern int warnings;
 

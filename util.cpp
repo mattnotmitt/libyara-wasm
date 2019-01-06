@@ -26,11 +26,17 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+#include <iostream>
 #include "util.hpp"
 
 char compile_error[1024];
 int warnings;
-
+struct resolved_match {
+    long long location;
+    long match_length;
+    std::string data;
+    long data_length;
+};
 static void callback_function(
         int error_level,
         const char *file_name,
@@ -93,8 +99,10 @@ int get_matched_rules(
                 resolved_match rmatch = {
                         match->base + match->offset,
                         match->match_length,
-                        std::string(*match->data, match->data_length)
+                        std::string((char *) match->data, match->data_length),
+                        match->data_length
                 };
+                std::cout << typeid(rmatch).name() << std::endl;
                 resolved_matches.push_back(rmatch);
             }
         }

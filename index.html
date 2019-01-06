@@ -7,6 +7,7 @@
     <script>
         Module.onRuntimeInitialized = _ => {
             document.forms["yara"].style.display = "block";
+            console.log(Module.que());
         }
         function runYara () {
             let cNode = document.getElementById("results").cloneNode(false);
@@ -18,7 +19,9 @@
                 const rule_matches = matchedRules.get(matchedRules.keys().get(i));
                 let matchString = `Rule "${matchedRules.keys().get(i)}" matches:\n`;
                 for (let j = 0; j < rule_matches.size(); j++) {
+                    console.log(rule_matches.size());
                     const match = rule_matches.get(j);
+                    console.log(match);
                     matchString += `Position ${match.location}, length ${match.length}, data: ${match.data}\n`;
                 }
                 const para = document.createElement("p");
