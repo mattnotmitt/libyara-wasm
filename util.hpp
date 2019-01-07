@@ -41,13 +41,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <fcntl.h>
 
 #include <yara.h>
-
-extern char compile_error[1024];
-extern int warnings;
+#include "YaraCC.hpp"
 
 int compile_rule(
         char* string,
-        YR_RULES** rules);
+        YR_RULES** rules,
+        YaraCC* resp_raw);
 
 
 int get_matched_rules(
