@@ -1,4 +1,5 @@
 build/
+dist/
 cmake-build-debug/
 clamav-yara/
 .idea
