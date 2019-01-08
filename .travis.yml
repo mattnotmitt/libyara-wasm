@@ -1,16 +1,22 @@
 language: node_js
 node_js:
 - node
-
 sudo: required
-
 services:
 - docker
-
 before_install:
-- docker run -dit --name emscripten -v $(pwd):/src trzeci/emscripten:sdk-incoming-64bit bash
+- docker run -dit --name emscripten -v $(pwd):/src trzeci/emscripten:sdk-incoming-64bit
+  bash
 - docker exec -it emscripten apt update
 - docker exec -it emscripten apt -y install autoconf libtool dh-autoreconf
-
 script:
-- docker exec -it emscripten /bin/sh -c 'mkdir build && cd build && emconfigure cmake .. && emmake make'
+- docker exec -it emscripten /bin/sh -c 'mkdir build && cd build && emconfigure cmake
+  .. && emmake make'
+deploy:
+  provider: npm
+  email: matt@artemisbot.uk
+  api_key:
+    secure: V1z8QH01MAincySwQ1HQim2ZR3jTU0zE3WzP19+oXSmP1j0huwv6iMDLHKtye0FiTyUTRH1byP+L4Ah5appHA6BI00kyTvEjDeI/x2/XewKFtFH3xnsZTl/OCsADT2QYm70h82ss0J0ctY+LcvSI4Rhr4CbaaMwLJu5XuITkZaRCptfy42mcZz0jigOTTKKIDF/MUq5JtvxXuO0icZAfH/f67DFY4q4jX1bhKlCFxDfgC47sQVbYibIF8hGjaxEd0YveoYyI3Pjrg9Sa0EkP0B/TepA1WNDwWqRy/q/e8YbSnLtPQON9BPoImugDfOCZTQkuFU3MRmxHud9wkkdcTu0oDxuvJkZJSDVO5GKT6CYHit9iG524E7Js5B68N+wB0rgwdIhyyAX2A80IRrGMOI5RbZVCsIyKpMBDIHinid/c2SeFDcdvh6QekFzFeV4ZD3kahHE0kZxHLTasjeEvW/i5OwaA/UsjXQi1Dsgfvxuu2Z+UjVGmq6cTmBIkUi5F/8oSyBaGfKNErO9srdkkST5nc9ETCkNJUPbDZTrgEmGLxdPUN8bPuE+5B8v9p2MsplgtACIR4ZgmQYaJIaRIQLuZ+hR5IKjJBCAkw1BZzkwDiR6DbG7nFKeEHkRQPILcF3BXJJRILVMCQJMlpLPh5Wsug2gBePcaJTDhBbpMiUs=
+  on:
+    tags: true
+    repo: artemisbot/libyara-wasm
