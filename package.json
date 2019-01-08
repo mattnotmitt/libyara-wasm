@@ -19,5 +19,6 @@
   "bugs": {
     "url": "https://github.com/artemisbot/libyara-wasm/issues"
   },
-  "homepage": "https://github.com/artemisbot/libyara-wasm#readme"
+  "homepage": "https://github.com/artemisbot/libyara-wasm#readme",
+  "dependencies": {}
 }
