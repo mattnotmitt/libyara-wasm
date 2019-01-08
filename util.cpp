@@ -12,7 +12,7 @@ static void callback_function(
     if (error_level == YARA_ERROR_LEVEL_WARNING)
         resp->warnings++;
     //std::cout << line_number << std::endl;
-    YaraCC::compile_error error = {message, line_number};
+    YaraCC::compile_error error = {message, line_number, error_level == YARA_ERROR_LEVEL_WARNING};
     resp->compile_errors.push_back(error);
 }
 
@@ -22,11 +22,11 @@ int compile_rule(
         YR_RULES **rules,
         YaraCC* resp) {
     YR_COMPILER *compiler = nullptr;
-    int result = ERROR_SUCCESS;
+    int result;
 
 
     if (yr_compiler_create(&compiler) != ERROR_SUCCESS) {
-        YaraCC::compile_error error = {"Compiler creation failed.", 0};
+        YaraCC::compile_error error = {"Compiler creation failed.", 0, 0};
         resp->compile_errors.push_back(error);
         return ERROR_NOT_INDEXABLE;
     }

@@ -50,7 +50,8 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::value_object<YaraCC::compile_error>("compileError")
             .field("message", &YaraCC::compile_error::message)
-            .field("lineNumber", &YaraCC::compile_error::line_number);
+            .field("lineNumber", &YaraCC::compile_error::line_number)
+            .field("warning", &YaraCC::compile_error::warning);
 
     emscripten::function("run", &run);
 }

@@ -20,6 +20,7 @@ public:
     struct compile_error {
         std::string message;
         int line_number;
+        bool warning;
     };
     const std::map<std::string, std::vector<resolved_match>> &getMatchedRules() const {
         return matched_rules;
