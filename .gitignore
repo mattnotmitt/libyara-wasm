@@ -1,5 +1,6 @@
 build/
-dist/
+*.js
+*.wasm
 cmake-build-debug/
 clamav-yara/
 .idea

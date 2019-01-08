@@ -9,8 +9,8 @@ services:
 
 before_install:
 - docker run -dit --name emscripten -v $(pwd):/src trzeci/emscripten:sdk-incoming-64bit bash
+- docker exec -it emscripten apt update
+- docker exec -it emscripten apt -y install autoconf libtool dh-autoreconf
 
 script:
-- mkdir build && mkdir dist && cd build
-- docker exec emconfigure cmake ..
-- docker exec emmake make
+- docker exec -it emscripten /bin/sh -c 'mkdir build && cd build && emconfigure cmake .. && emmake make'

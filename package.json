@@ -1,0 +1,23 @@
+{
+  "name": "libyara-wasm",
+  "version": "0.0.1",
+  "description": "Yara built into wasm",
+  "main": "dist/libyara-wasm.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artemisbot/libyara-wasm.git"
+  },
+  "keywords": [
+    "yara",
+    "wasm"
+  ],
+  "author": "Matt C [matt@artemisbot.uk]",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/artemisbot/libyara-wasm/issues"
+  },
+  "homepage": "https://github.com/artemisbot/libyara-wasm#readme"
+}
