@@ -17,16 +17,26 @@ public:
         std::string data;
         long data_length;
     };
+    struct meta {
+        std::string identifier;
+        std::string data;
+    };
+    struct matched_rule {
+        std::string rule_name;
+        std::vector<resolved_match> resolved_matches;
+        std::vector<meta> metadata;
+    };
     struct compile_error {
         std::string message;
         int line_number;
         bool warning;
     };
-    const std::map<std::string, std::vector<resolved_match>> &getMatchedRules() const {
+
+    const std::vector<matched_rule> &getMatchedRules() const {
         return matched_rules;
     }
 
-    void setMatchedRules(const std::map<std::string, std::vector<resolved_match>> &matched_rules) {
+    void setMatchedRules(const std::vector<matched_rule> &matched_rules) {
         YaraCC::matched_rules = matched_rules;
     }
 
@@ -38,17 +48,8 @@ public:
         YaraCC::compile_errors = compile_errors;
     }
 
-    int getWarnings() const {
-        return warnings;
-    }
-
-    void setWarnings(int warnings) {
-        YaraCC::warnings = warnings;
-    }
-
-    std::map<std::string, std::vector<resolved_match>> matched_rules = std::map<std::string, std::vector<resolved_match>>();
+    std::vector<matched_rule> matched_rules = std::vector<matched_rule>();
     std::vector<compile_error> compile_errors = std::vector<compile_error>();
-    int warnings = 0;
 };
 
 

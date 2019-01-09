@@ -31,14 +31,22 @@ void set_resolved_match_location(YaraCC::resolved_match &match, double value) {
 EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::class_<YaraCC>("YaraCC")
             .property("compileErrors", &YaraCC::getCompileErrors, &YaraCC::setCompileErrors)
-            .property("warnings", &YaraCC::getWarnings, &YaraCC::setWarnings)
             .property("matchedRules", &YaraCC::getMatchedRules, &YaraCC::setMatchedRules);
     emscripten::register_vector<unsigned char>("vectorChar");
+    emscripten::register_vector<std::string>("vectorString");
+
+    emscripten::register_vector<YaraCC::meta>("vectorMeta");
     emscripten::register_vector<YaraCC::compile_error>("vectorCompileError");
     emscripten::register_vector<YaraCC::resolved_match>("vectorResolvedMatch");
-    emscripten::register_vector<std::string>("vectorString");
-    emscripten::register_map<std::string, std::vector<YaraCC::resolved_match>>("mapStringVectorResolvedMatch");
+    emscripten::register_vector<YaraCC::matched_rule>("vectorMatchedRule");
 
+    emscripten::value_object<YaraCC::meta>("meta")
+            .field("identifier", &YaraCC::meta::identifier)
+            .field("data", &YaraCC::meta::data);
+    emscripten::value_object<YaraCC::matched_rule>("matchedRule")
+            .field("ruleName", &YaraCC::matched_rule::rule_name)
+            .field("resolvedMatches", &YaraCC::matched_rule::resolved_matches)
+            .field("metadata", &YaraCC::matched_rule::metadata);
     emscripten::value_object<YaraCC::resolved_match>("resolvedMatch")
             .field("location", &get_resolved_match_location, &set_resolved_match_location)
             .field("matchLength", &YaraCC::resolved_match::match_length)

@@ -9,8 +9,6 @@ static void callback_function(
         const char *message,
         void *user_data) {
     auto resp = (YaraCC *) user_data;
-    if (error_level == YARA_ERROR_LEVEL_WARNING)
-        resp->warnings++;
     //std::cout << line_number << std::endl;
     YaraCC::compile_error error = {message, line_number, error_level == YARA_ERROR_LEVEL_WARNING};
     resp->compile_errors.push_back(error);
@@ -67,7 +65,26 @@ int get_matched_rules(
                 resolved_matches.push_back(rmatch);
             }
         }
-        resp->matched_rules.emplace(rule->identifier, resolved_matches);
+        YR_META* meta;
+        std::vector<YaraCC::meta> metadata;
+        yr_rule_metas_foreach(rule, meta)
+        {
+            std::stringstream metaString;
+            if (meta->type == META_TYPE_INTEGER)
+            {
+                metaString << meta->integer;
+            }
+            else if (meta->type == META_TYPE_BOOLEAN)
+            {
+                metaString << (meta->integer ? "true" : "false");
+            }
+            else
+            {
+                metaString << meta->string;
+            }
+            metadata.push_back((YaraCC::meta) {meta->identifier, metaString.str()});
+        }
+        resp->matched_rules.push_back({rule->identifier, resolved_matches, metadata});
     }
 
     return CALLBACK_CONTINUE;
