@@ -60,6 +60,7 @@ int get_matched_rules(
                         match->base + match->offset,
                         match->match_length,
                         std::string((char *) match->data, match->data_length),
+                        string->identifier,
                         match->data_length
                 };
                 resolved_matches.push_back(rmatch);

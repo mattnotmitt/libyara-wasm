@@ -51,6 +51,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
             .field("location", &get_resolved_match_location, &set_resolved_match_location)
             .field("matchLength", &YaraCC::resolved_match::match_length)
             .field("data", &YaraCC::resolved_match::data)
+            .field("stringIdentifier", &YaraCC::resolved_match::string_identifier)
             .field("dataLength", &YaraCC::resolved_match::data_length);
 
     emscripten::value_object<YaraCC::compile_error>("compileError")

@@ -15,6 +15,7 @@ public:
         long long location;
         long match_length;
         std::string data;
+        std::string string_identifier;
         long data_length;
     };
     struct meta {
