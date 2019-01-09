@@ -1,6 +1,6 @@
 {
   "name": "libyara-wasm",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Yara built into wasm",
   "main": "dist/libyara-wasm.js",
   "scripts": {
