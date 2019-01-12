@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <map>
 #include <vector>
 #include <string>
+#include <iostream>
 #include <sstream>
 #include <stdio.h>
 #include <unistd.h>
@@ -42,6 +43,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <fcntl.h>
 
 #include <yara.h>
+
 #include "YaraCC.hpp"
 
 int compile_rule(

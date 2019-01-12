@@ -3,19 +3,23 @@
 #include "util.hpp"
 #include "YaraCC.hpp"
 
-YaraCC run(std::vector<unsigned char> buf_vec, const std::string &rules_str) {
-    YR_RULES* rules;
+YaraCC run(const std::string &buf_str, const std::string &rules_str) {
+    // Init variables
     YaraCC resp;
-    unsigned char* buf = buf_vec.data();
+    YR_RULES* rules;
+    // Convert C++ strings to terrible C pointer arrays
+    auto buf = (unsigned char*) buf_str.c_str();
     char* rules_chr = const_cast<char*>(rules_str.c_str());
 
-    yr_initialize();
-    int result = compile_rule(rules_chr, &rules, &resp);
-    if (result != ERROR_SUCCESS)
+    yr_initialize(); // Init YARA
+    int result = compile_rule(rules_chr, &rules, &resp); // Compile inputted rules
+    if (result != ERROR_SUCCESS) // If failure, return to JS
     {
         return resp;
     }
-    yr_rules_scan_mem(rules, buf, buf_vec.size(), 0, get_matched_rules, &resp, 0);
+    // Scan data in buf with rules
+    yr_rules_scan_mem(rules, buf, buf_str.size(), 0, get_matched_rules, &resp, 0);
+    // Stop YARA
     yr_finalize();
     return resp;
 }
@@ -32,7 +36,6 @@ EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::class_<YaraCC>("YaraCC")
             .property("compileErrors", &YaraCC::getCompileErrors, &YaraCC::setCompileErrors)
             .property("matchedRules", &YaraCC::getMatchedRules, &YaraCC::setMatchedRules);
-    emscripten::register_vector<unsigned char>("vectorChar");
     emscripten::register_vector<std::string>("vectorString");
 
     emscripten::register_vector<YaraCC::meta>("vectorMeta");

@@ -1,6 +1,4 @@
 #include "util.hpp"
-#include <iostream>
-
 
 static void callback_function(
         int error_level,
