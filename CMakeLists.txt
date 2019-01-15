@@ -23,7 +23,7 @@ ExternalProject_Add(openssl
         #COMMAND sed -i "s|^build_libs.*$|build_libs: build_libcrypto|g" Makefile
         #COMMAND sed -i "s|^LIBS=.*$|LIBS=   libcrypto.a|g" Makefile
         #COMMAND sed -i "s|^SHARED_LIBS=.*$|SHARED_LIBS=$(SHARED_CRYPTO)|g" Makefile
-        BUILD_COMMAND $(MAKE)
+        BUILD_COMMAND $(MAKE) -s NO_FILESYSTEM=1
         BUILD_IN_SOURCE 1
         BUILD_BYPRODUCTS
         <SOURCE_DIR>/libcrypto.a
@@ -45,7 +45,7 @@ ExternalProject_Add(yara
         CONFIGURE_COMMAND emconfigure ./bootstrap.sh
         COMMAND sed -i "s|OPENSSL_VERSION_NUMBER.*$|OPENSSL_VERSION_NUMBER < 0x10002000L|" libyara/libyara.c
         COMMAND emconfigure ./configure
-        BUILD_COMMAND $(MAKE)
+        BUILD_COMMAND $(MAKE) -s NO_FILESYSTEM=1
         DEPENDS libcrypto
         BUILD_IN_SOURCE 1
         BUILD_BYPRODUCTS
@@ -68,5 +68,5 @@ add_dependencies(libyara-wasm libyara libcrypto)
 target_link_libraries(libyara-wasm libyara libcrypto)
 set_target_properties(libyara-wasm
         PROPERTIES SUFFIX ".js"
-        LINK_FLAGS "--bind -O3 -s MODULARIZE=1 -s ENVIRONMENT='worker' -s SINGLE_FILE=1 -s ALLOW_MEMORY_GROWTH=1"
+        LINK_FLAGS "--bind -O3 -s MODULARIZE=1 -s NO_FILESYSTEM=1 -s SINGLE_FILE=1 -s ALLOW_MEMORY_GROWTH=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0"
 )
