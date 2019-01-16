@@ -68,5 +68,5 @@ add_dependencies(libyara-wasm libyara libcrypto)
 target_link_libraries(libyara-wasm libyara libcrypto)
 set_target_properties(libyara-wasm
         PROPERTIES SUFFIX ".js"
-        LINK_FLAGS "--bind -O3 -s MODULARIZE=1 -s NO_FILESYSTEM=1 -s SINGLE_FILE=1 -s ALLOW_MEMORY_GROWTH=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0"
+        LINK_FLAGS "--bind -O3 -s MODULARIZE=1 -s NO_FILESYSTEM=1 -s SINGLE_FILE=1 -s ALLOW_MEMORY_GROWTH=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s ENVIRONMENT='node, worker'"
 )
