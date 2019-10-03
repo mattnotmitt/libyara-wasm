@@ -1,8 +1,6 @@
 # libyara-wasm
-Basic compilation of libyara to wasm and to run some tests in a html file. Further plans include basic yara functionality tests before potential integration with CyberChef. 
-(I don't exactly understand the wasm/js integration layer just yet, so we'll see how it goes)
-Some modules unavailable at the moment, but this isn't necessarily always going to be true.
-
+![](https://github.com/mattnotmitt/libyara-wasm/workflows/Build%20%26%20Deploy/badge.svg)
+WASM-based JS Library using a c++ wrapper around [libyara](https://github.com/virustotal/yara). Currently only exposes methods required by [CyberChef](https://github.com/gchq/CyberChef) but may potentially expose more in the future. No documentation at the moment.
 ## Build
 
 ```sh
