@@ -14,11 +14,11 @@ jobs:
       - name: Update & Install Prequisities
         run: |
           docker pull trzeci/emscripten:sdk-incoming-64bit
-          docker run -dit --name emscripten -v $(pwd):/src trzeci/emscripten:sdk-incoming-64bit bash
-          docker exec -it emscripten apt update
-          docker exec -it emscripten apt -y install autoconf libtool dh-autoreconf
+          docker run -di --name emscripten -v $(pwd):/src trzeci/emscripten:sdk-incoming-64bit bash
+          docker exec -i emscripten apt update
+          docker exec -i emscripten apt -y install autoconf libtool dh-autoreconf
       - name: Build libyara
-        run: docker exec -it emscripten /bin/sh -c 'mkdir build && cd build && emconfigure cmake .. && emmake make'
+        run: docker exec -i emscripten /bin/sh -c 'mkdir build && cd build && emconfigure cmake .. && emmake make'
       - name: Deploy to NPM
         run: |
           npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
