@@ -40,8 +40,8 @@ set_target_properties(libcrypto
 add_dependencies(libcrypto openssl)
 
 ExternalProject_Add(yara
-        URL https://github.com/VirusTotal/yara/archive/v3.9.0.tar.gz
-        URL_HASH SHA512=c9aa17d5e25f21f935e9938d8248366f928889a6fb8f70bbd22b6e2d7f74427d47259ca410dfcaa8de3e8ad7c82715fde0366e24209a672555e54d8d459086be
+        URL https://github.com/VirusTotal/yara/archive/v3.10.0.tar.gz
+        URL_HASH SHA512=034658e835d59a42f03c062e99b40e96906c5a7de4285037c835d211f53062f8e439ade45e3400c4c35ef64502112e8d3b8d4c575e3265c69286cff2ad919ed9
         CONFIGURE_COMMAND emconfigure ./bootstrap.sh
         COMMAND sed -i "s|OPENSSL_VERSION_NUMBER.*$|OPENSSL_VERSION_NUMBER < 0x10002000L|" libyara/libyara.c
         COMMAND emconfigure ./configure
