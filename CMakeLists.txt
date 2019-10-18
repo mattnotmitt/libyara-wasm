@@ -21,7 +21,7 @@ ExternalProject_Add(openssl
         COMMAND sed -i "s|^CROSS_COMPILE.*$|CROSS_COMPILE=|g" Makefile
         BUILD_COMMAND $(MAKE) build_generated libcrypto.a libssl.a -s NO_FILESYSTEM=1
         BUILD_IN_SOURCE 1
-	INSTALL_COMMAND bash -c "cp libssl.a libcrypto.a $ENV{EMSCRIPTEN}/system/lib; cp -R include/openssl $ENV{EMSCRIPTEN}/system/include"
+	INSTALL_COMMAND cp libssl.a libcrypto.a $ENV{EMSCRIPTEN}/system/lib COMMAND cp -R include/openssl $ENV{EMSCRIPTEN}/system/include
 	
 	)
 add_library(libcrypto STATIC IMPORTED GLOBAL)
