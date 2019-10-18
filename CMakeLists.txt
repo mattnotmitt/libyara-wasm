@@ -15,23 +15,15 @@ include_directories(
 )
 
 ExternalProject_Add(openssl
-        URL https://www.openssl.org/source/openssl-1.0.2q.tar.gz
-        URL_HASH SHA256=5744cfcbcec2b1b48629f7354203bc1e5e9b5466998bbccc5b5fcde3b18eb684
-        CONFIGURE_COMMAND emmake bash -c "./Configure -no-asm -no-apps no-ssl2 no-ssl3 no-hw no-deprecated shared --openssldir=built linux-generic32 --prefix=$ENV{EMSCRIPTEN}/system"
+        URL https://www.openssl.org/source/openssl-1.1.1d.tar.gz 
+	URL_HASH SHA256=1e3a91bc1f9dfce01af26026f856e064eab4c8ee0a8f457b5ae30b40b8b711f2
+	CONFIGURE_COMMAND emmake bash -c "./Configure -no-asm linux-generic32 --prefix=$ENV{EMSCRIPTEN}/system CFLAGS='-D__STDC_NO_ATOMICS__=1'"
         COMMAND sed -i "s|^CROSS_COMPILE.*$|CROSS_COMPILE=|g" Makefile
-        COMMAND sed -i "s|^build_all.*$|build_all: build_libs build_apps|g" Makefile
-        #COMMAND sed -i "s|^build_libs.*$|build_libs: build_libcrypto|g" Makefile
-        #COMMAND sed -i "s|^LIBS=.*$|LIBS=   libcrypto.a|g" Makefile
-        #COMMAND sed -i "s|^SHARED_LIBS=.*$|SHARED_LIBS=$(SHARED_CRYPTO)|g" Makefile
-        BUILD_COMMAND $(MAKE) -s NO_FILESYSTEM=1
+        BUILD_COMMAND $(MAKE) build_generated libcrypto.a libssl.a -s NO_FILESYSTEM=1
         BUILD_IN_SOURCE 1
-        BUILD_BYPRODUCTS
-        <SOURCE_DIR>/libcrypto.a
-        <SOURCE_DIR>/libcrypto.so
-        <SOURCE_DIR>/libcrypto.so.1.0.2
-        #INSTALL_COMMAND cp -t $ENV{EMSCRIPTEN}/lib/ libcrypto.a libcrypto.so libcrypto.so.1.0.0
-        INSTALL_COMMAND emmake make install
-        )
+	INSTALL_COMMAND bash -c "cp libssl.a libcrypto.a $ENV{EMSCRIPTEN}/system/lib; cp -R include/openssl $ENV{EMSCRIPTEN}/system/include"
+	
+	)
 add_library(libcrypto STATIC IMPORTED GLOBAL)
 set_target_properties(libcrypto
         PROPERTIES
@@ -40,20 +32,14 @@ set_target_properties(libcrypto
 add_dependencies(libcrypto openssl)
 
 ExternalProject_Add(yara
-        URL https://github.com/VirusTotal/yara/archive/v3.10.0.tar.gz
-        URL_HASH SHA512=034658e835d59a42f03c062e99b40e96906c5a7de4285037c835d211f53062f8e439ade45e3400c4c35ef64502112e8d3b8d4c575e3265c69286cff2ad919ed9
+        URL https://github.com/VirusTotal/yara/archive/v3.11.0.tar.gz
+	URL_HASH SHA512=26d800284a2de07195e4a480eb7125b1f5ad0265b284bfbeee10dbab162ea0f419c9e2ea5c4ed5fa25a46a2c9e3c6b077dfe1cafece79251e20d5d70f91b80a8
         CONFIGURE_COMMAND emconfigure ./bootstrap.sh
-        COMMAND sed -i "s|OPENSSL_VERSION_NUMBER.*$|OPENSSL_VERSION_NUMBER < 0x10002000L|" libyara/libyara.c
         COMMAND emconfigure ./configure
         BUILD_COMMAND $(MAKE) -s NO_FILESYSTEM=1
         DEPENDS libcrypto
         BUILD_IN_SOURCE 1
-        BUILD_BYPRODUCTS
-        <SOURCE_DIR>/libyara/.libs/libyara.a
-        <SOURCE_DIR>/libyara/.libs/libyara.so
-        <SOURCE_DIR>/libyara/.libs/libyara.so.3
-        <SOURCE_DIR>/libyara/.libs/libyara.so.3.8.1
-        INSTALL_COMMAND ""
+	INSTALL_COMMAND cp libyara/.libs/libyara.a $ENV{EMSCRIPTEN}/system/lib
         )
 
 add_library(libyara STATIC IMPORTED GLOBAL)
