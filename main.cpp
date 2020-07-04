@@ -7,6 +7,7 @@ YaraCC run(const std::string &buf_str, const std::string &rules_str) {
     // Init variables
     YaraCC resp;
     YR_RULES* rules;
+    YR_SCAN_CONTEXT* context;
     // Convert C++ strings to terrible C pointer arrays
     auto buf = (unsigned char*) buf_str.c_str();
     char* rules_chr = const_cast<char*>(rules_str.c_str());

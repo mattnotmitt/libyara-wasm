@@ -53,6 +53,7 @@ int compile_rule(
 
 
 int get_matched_rules(
+        YR_SCAN_CONTEXT* context,
         int message,
         void* message_data,
         void* user_data);
