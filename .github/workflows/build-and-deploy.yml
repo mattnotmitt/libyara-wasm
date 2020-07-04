@@ -16,7 +16,7 @@ jobs:
           docker pull trzeci/emscripten:sdk-incoming-64bit
           docker run -di --name emscripten -v $(pwd):/src trzeci/emscripten:sdk-incoming-64bit bash
           docker exec -i emscripten apt update
-          docker exec -i emscripten apt -y install autoconf libtool dh-autoreconf
+          docker exec -i emscripten apt -y install autoconf libtool dh-autoreconf pkg-config
       - name: Build libyara
         run: docker exec -i emscripten /bin/sh -c 'mkdir build && cd build && emconfigure cmake .. && emmake make'
       - name: Deploy to NPM
