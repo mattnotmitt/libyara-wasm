@@ -18,5 +18,5 @@ jobs:
           docker exec -i emscripten apt update
           docker exec -i emscripten apt -y install autoconf libtool dh-autoreconf pkg-config
       - name: Build libyara
-        run: docker exec -i emscripten /bin/sh -c 'mkdir build && cd build && emcmake cmake .. && emmake make'
+        run: docker exec -i emscripten /bin/sh -c 'mkdir -p /system/lib && mkdir build && cd build && emcmake cmake .. && emmake make'
 
