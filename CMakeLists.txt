@@ -35,8 +35,8 @@ add_dependencies(libcrypto openssl)
 ExternalProject_Add(yara
         URL https://github.com/VirusTotal/yara/archive/v4.1.2.tar.gz
         URL_HASH SHA512=ea170672e15033fe587cc7c706176b00f447110fdbb0c3921db7521c7931ab77deeb4e634a96c0d8ef797e6a9f2f29355a63d70c8805c51cf062bea69de06cfd
-        CONFIGURE_COMMAND emconfigure ./bootstrap.sh
-        COMMAND emconfigure ./configure
+        CONFIGURE_COMMAND LDFLAGS=-sERROR_ON_UNDEFINED_SYMBOLS=0 emconfigure ./bootstrap.sh
+        COMMAND LDFLAGS=-sERROR_ON_UNDEFINED_SYMBOLS=0 emconfigure ./configure
         BUILD_COMMAND $(MAKE) -s NO_FILESYSTEM=1
         DEPENDS libcrypto
         BUILD_IN_SOURCE 1
@@ -55,5 +55,5 @@ add_dependencies(libyara-wasm libyara libcrypto)
 target_link_libraries(libyara-wasm libyara libcrypto)
 set_target_properties(libyara-wasm
         PROPERTIES SUFFIX ".js"
-        LINK_FLAGS "--bind -Oz -s WASM=1 --closure 1 -s MODULARIZE=1 -s NO_FILESYSTEM=1 -s ALLOW_MEMORY_GROWTH=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s USE_PTHREADS=1 -s SINGLE_FILE=1 -s ENVIRONMENT='node, worker'"
+        LINK_FLAGS "--bind -Oz -s WASM=1 --closure 1 -s MODULARIZE=1 -s NO_FILESYSTEM=1 -s ALLOW_MEMORY_GROWTH=1 -s EXPORT_NAME=Something -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s USE_PTHREADS=1 -s SINGLE_FILE=1 -s ENVIRONMENT='node,worker'"
         )
