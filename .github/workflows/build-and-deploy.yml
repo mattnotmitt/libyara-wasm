@@ -14,12 +14,12 @@ jobs:
       - uses: actions/checkout@v1
       - name: Update & Install Prequisities
         run: |
-          docker pull trzeci/emscripten:sdk-incoming-64bit
-          docker run -di --name emscripten -v $(pwd):/src trzeci/emscripten:sdk-incoming-64bit bash
+          docker pull emscripten/emsdk
+          docker run -di --name emscripten -v $(pwd):/src emscripten/emsdk bash
           docker exec -i emscripten apt update
           docker exec -i emscripten apt -y install autoconf libtool dh-autoreconf pkg-config
       - name: Build libyara
-        run: docker exec -i emscripten /bin/sh -c 'mkdir build && cd build && emconfigure cmake .. && emmake make'
+        run: docker exec -i emscripten /bin/sh -c 'rm -rf build && mkdir -p build && cd build && emcmake cmake -S .. -B . && emmake make'
       - name: Deploy to NPM
         if: github.event_name == 'push' && startsWith('refs/tags/v', github.ref)
         run: |
@@ -27,3 +27,6 @@ jobs:
           npm publish || true
         env:
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      - name: Cleanup
+        if: always()
+        run: docker rm -f emscripten
