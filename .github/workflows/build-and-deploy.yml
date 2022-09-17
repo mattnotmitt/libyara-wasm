@@ -21,7 +21,7 @@ jobs:
       - name: Build libyara
         run: docker exec -i emscripten /bin/sh -c 'mkdir build && cd build && emconfigure cmake .. && emmake make'
       - name: Deploy to NPM
-        if: github.event_name == push && startsWith("refs/tags/v", github.ref)
+        if: github.event_name == 'push' && startsWith('refs/tags/v', github.ref)
         run: |
           npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
           npm publish || true
