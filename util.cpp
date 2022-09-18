@@ -4,8 +4,8 @@ void callback_function(
         int error_level,
         const char *file_name,
         int line_number,
-        const char *message,
         const YR_RULE *rule,
+        const char *message,
         void *user_data) {
     auto resp = (YaraCC *) user_data;
     //std::cout << line_number << std::endl;
@@ -48,8 +48,8 @@ int get_matched_rules(
         int message,
         void *message_data,
         void *user_data) {
+    auto resp = (YaraCC *) user_data;
     if (message == CALLBACK_MSG_RULE_MATCHING) {
-        auto resp = (YaraCC *) user_data;
         auto rule = (YR_RULE *) message_data;
         YR_STRING *string;
         std::vector<YaraCC::resolved_match> resolved_matches;
@@ -86,6 +86,8 @@ int get_matched_rules(
             metadata.push_back((YaraCC::meta) {meta->identifier, metaString.str()});
         }
         resp->matched_rules.push_back({rule->identifier, resolved_matches, metadata});
+    } else if (message == CALLBACK_MSG_CONSOLE_LOG) {
+        resp->console_logs.push_back({(char *) message_data});
     }
 
     return CALLBACK_CONTINUE;

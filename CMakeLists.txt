@@ -51,8 +51,9 @@ set_target_properties(libyara
         )
 add_dependencies(libyara yara)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../dist)
-add_executable(libyara-wasm main.cpp util.hpp util.cpp YaraCC.hpp)
+add_executable(libyara-wasm YaraCC.cpp util.hpp util.cpp YaraCC.h)
 add_dependencies(libyara-wasm libyara libcrypto)
+target_include_directories(libyara-wasm PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(libyara-wasm libyara libcrypto)
 set_target_properties(libyara-wasm
         PROPERTIES SUFFIX ".js"

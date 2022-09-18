@@ -44,7 +44,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <yara.h>
 
-#include "YaraCC.hpp"
+#include "YaraCC.h"
 
 int compile_rule(
         char* string,

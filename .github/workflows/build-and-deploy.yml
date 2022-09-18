@@ -1,27 +1,43 @@
-name: Build & Deploy
+name: Test, Build & Deploy
 on: 
   push:
     tags:
       - '**'
   workflow_dispatch: 
 
-jobs: 
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Update & Install Prereqs
+        run: |
+          docker pull emscripten/emsdk
+          docker run -di --name yara-test -w /src -v $(pwd):/src archlinux:base-devel-20220904.0.80503 bash
+          docker exec -i yara-test pacman -Sy --noconfirm yara cmake git
+      - name: Test yaracc
+        run: docker exec -i yara-test /bin/sh -c 'rm -rf test/build && mkdir -p test/build && cmake -S test -B test/build && cmake --build test/build && ctest --test-dir test/build'
+      - name: Cleanup
+        if: always()
+        run: docker rm -f yara-test
   build-deploy:
     name: Build & Deploy
-    
+    needs: test
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - name: Update & Install Prequisities
         run: |
           docker pull emscripten/emsdk
-          docker run -di --name emscripten -v $(pwd):/src emscripten/emsdk bash
+          docker run -di --name emscripten -v $(pwd):/src emscripten/emsdk:3.1.21 bash
           docker exec -i emscripten apt update
           docker exec -i emscripten apt -y install autoconf libtool dh-autoreconf pkg-config
-      - name: Build libyara
-        run: docker exec -i emscripten /bin/sh -c 'rm -rf build && mkdir -p build && cd build && emcmake cmake -S .. -B . && emmake make'
+      - name: Build libyara-wasm
+        run: docker exec -i emscripten /bin/sh -c 'rm -rf build && mkdir -m 0777 -p build && cd build && emcmake cmake -S .. -B . && emmake make'
       - name: Deploy to NPM
-        if: github.event_name == 'push' && startsWith('refs/tags/v', github.ref)
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
         run: |
           npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
           npm publish || true

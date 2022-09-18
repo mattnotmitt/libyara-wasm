@@ -1,7 +1,11 @@
 #include <iostream>
-#include <emscripten/bind.h>
+
 #include "util.hpp"
-#include "YaraCC.hpp"
+#include "YaraCC.h"
+
+#ifdef EMSCRIPTEN
+#include <emscripten/bind.h>
+#endif // EMSCRIPTEN
 
 YaraCC run(const std::string &buf_str, const std::string &rules_str) {
     // Init variables
@@ -25,6 +29,7 @@ YaraCC run(const std::string &buf_str, const std::string &rules_str) {
     return resp;
 }
 
+#ifdef EMSCRIPTEN
 double get_resolved_match_location(const YaraCC::resolved_match &match) {
     return (double)match.location;
 }
@@ -35,10 +40,11 @@ void set_resolved_match_location(YaraCC::resolved_match &match, double value) {
 
 EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::class_<YaraCC>("YaraCC")
-            .property("compileErrors", &YaraCC::getCompileErrors, &YaraCC::setCompileErrors)
-            .property("matchedRules", &YaraCC::getMatchedRules, &YaraCC::setMatchedRules);
-    emscripten::register_vector<std::string>("vectorString");
+            .property("compileErrors", &YaraCC::compile_errors)
+            .property("matchedRules", &YaraCC::matched_rules)
+            .property("consoleLogs", &YaraCC::console_logs);
 
+    emscripten::register_vector<std::string>("vectorString");
     emscripten::register_vector<YaraCC::meta>("vectorMeta");
     emscripten::register_vector<YaraCC::compile_error>("vectorCompileError");
     emscripten::register_vector<YaraCC::resolved_match>("vectorResolvedMatch");
@@ -65,4 +71,4 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     emscripten::function("run", &run);
 }
-
+#endif // EMSCRIPTEN
